@@ -1,0 +1,27 @@
+{
+    "name": "infyomlabs/laravel-generator-helpers",
+    "description": "Helper functions for laravel generator packages",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Mitul Golakiya",
+            "email": "me@mitul.me"
+        }
+    ],
+    "require": {
+        "php": "^7.3|^8.0",
+        "illuminate/support": "^8.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "InfyOm\\GeneratorHelpers\\": "src/"
+        }
+    },
+    "funding": [
+        {
+            "type": "opencollective",
+            "url": "https://opencollective.com/infyomlabs"
+        }
+    ]
+}
