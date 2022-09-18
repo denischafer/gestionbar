@@ -7,7 +7,7 @@ use Illuminate\Database\Seeder;
 //Saptie
 use Spatie\Permission\Models\Permission;
 
-class SeederTablaPremisos extends Seeder
+class SeederTablaPermisos extends Seeder
 {
     /**
      * Run the database seeds.

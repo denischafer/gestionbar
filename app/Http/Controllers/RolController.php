@@ -60,7 +60,7 @@ class RolController extends Controller
 
         $role->syncPermissions( $request->input('permission') );
 
-        return redirect()->route( 'roles.indes' );
+        return redirect()->route( 'roles.index' );
     }
 
     /**
@@ -82,7 +82,7 @@ class RolController extends Controller
      */
     public function edit($id)
     {
-        $role= Role::fine( $id );
+        $role= Role::find( $id );
         $permission = Permission::get();
         $rolePermissions = DB::table('role_has_permissions')
                                 ->where('role_has_permissions.role_id',$id)
