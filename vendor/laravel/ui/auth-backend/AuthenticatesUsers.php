@@ -31,6 +31,7 @@ trait AuthenticatesUsers
      */
     public function login(Request $request)
     {
+
         $this->validateLogin($request);
 
         // If the class is using the ThrottlesLogins trait, we can automatically throttle
@@ -70,6 +71,7 @@ trait AuthenticatesUsers
     protected function validateLogin(Request $request)
     {
         $request->validate([
+            'db' => 'required|integer',
             $this->username() => 'required|string',
             'password' => 'required|string',
         ]);
@@ -96,7 +98,7 @@ trait AuthenticatesUsers
      */
     protected function credentials(Request $request)
     {
-        return $request->only($this->username(), 'password');
+        return $request->only($this->username(), 'password','db');
     }
 
     /**
@@ -129,9 +131,8 @@ trait AuthenticatesUsers
      */
     protected function authenticated(Request $request, $user)
     {
-        //
+        session(['db_customer' => $request->db]);
     }
-
     /**
      * Get the failed login response instance.
      *

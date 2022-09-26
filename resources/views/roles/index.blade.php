@@ -10,7 +10,7 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
-                           @can('crear-rol')
+                           @can('crear-puestos')
                            <a class='btn btn-warning' href='{{ route('roles.create') }}'>Nuevo Puesto</a>
                            @endcan
 
@@ -27,11 +27,11 @@
                                     <td class='d-none'>{{ $rol->id }}</td>
                                     <td>{{ $rol->name }}</td>
                                     <td class='text-right'>
-                                        @can('edit-rol')
+                                        @can('edit-puestos')
                                         <a class='btn btn-success' href='{{ route('roles.edit',$rol->id) }}'>Editar</a>
                                         @endcan
 
-                                        @can('borrar-rol')
+                                        @can('borrar-puestos')
                                             {!! Form::open(['method'=>'DELETE', 'route'=>['roles.destroy', $rol->id], 'style'=>'display:inline']) !!}
                                                 {!! Form::submit('Borrar', ['class'=>'btn btn-danger']) !!}
                                             {!! Form::close() !!}
@@ -42,7 +42,9 @@
                             </tbody>
 
                         </table>
-
+                        <div class='pagination justify-content-end'>
+                            {!! $roles->links() !!}
+                        </div>
 
                         </div>
                     </div>

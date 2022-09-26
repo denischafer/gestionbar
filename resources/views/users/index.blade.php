@@ -11,8 +11,11 @@
                     <div class="card">
                         <div class="card-body">
 
-                            <a class='btn btn-warning' href='{{ route('users.create') }}'>Nuevo Operador</a>
+                            @can('crear-usuarios')
+                                <a class='btn btn-warning' href='{{ route('users.create') }}'>Nuevo Operador</a>
+                            @endcan
 
+                            @can('ver-usuarios')
                             <table class='table table-striped mt-2'>
 
                                 <thead class='bg-primary'>
@@ -36,10 +39,14 @@
                                             @endif
                                         </td>
                                         <td class='text-right'>
-                                            <a class='btn btn-success' href='{{ route('users.edit',$user->id) }}'>Editar</a>
-                                            {!! Form::open(['method'=>'DELETE', 'route'=>['users.destroy', $user->id], 'style'=>'display:inline']) !!}
-                                                {!! Form::submit('Borrar', ['class'=>'btn btn-danger']) !!}
-                                            {!! Form::close() !!}
+                                            @can('editar-usuarios')
+                                                <a class='btn btn-success' href='{{ route('users.edit',$user->id) }}'>Editar</a>
+                                            @endcan
+                                            @can('borrar-usuarios')
+                                                {!! Form::open(['method'=>'DELETE', 'route'=>['users.destroy', $user->id], 'style'=>'display:inline']) !!}
+                                                    {!! Form::submit('Borrar', ['class'=>'btn btn-danger']) !!}
+                                                {!! Form::close() !!}
+                                            @endcan
                                         </td>
                                     </tr>
                                     @endforeach
@@ -47,8 +54,9 @@
 
                             </table>
                             <div class='pagination justify-content-end'>
-                                {!! $user->links !!}
+                                {!! $users->links() !!}
                             </div>
+                            @endcan
 
                         </div>
                     </div>

@@ -5,16 +5,19 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Models\Categorie;
+use App\Models\Status;
+
 
 class ProductController extends Controller
 {
 
     function __construct()
     {
-        $this->middleware('permission:ver-product | crear-product | editar-product | borrar-product', ['only' => ['index']]);
-        $this->middleware('permission:crear-product', ['only' => ['create','store']]);
-        $this->middleware('permission:editar-product', ['only' => ['edit','update']]);
-        $this->middleware('permission:borrar-product', ['only' => ['destroy']]);
+        $this->middleware('permission:ver-productos|crear-productos|editar-productos|borrar-productos', ['only' => ['index']]);
+        $this->middleware('permission:crear-productos', ['only' => ['create','store']]);
+        $this->middleware('permission:editar-productos', ['only' => ['edit','update']]);
+        $this->middleware('permission:borrar-productos', ['only' => ['destroy']]);
     }
     /**
      * Display a listing of the resource.
@@ -23,8 +26,28 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::paginate(10);
-        return view('products.index',compact('products'));
+        $products = Product::paginate(5);
+
+        //$products = Product::all();
+
+        $products = $products->map( function( $product ){
+
+            foreach ($product as $prod) {
+
+                $name_categorie=Categorie::where('id',$product->categorie_id)->get()->pluck('name');
+                $name_status=Status::where('id',$product->status_id)->get()->pluck('name');
+
+                $product->categorie_name = $name_categorie[0];
+
+                $product->status_name = $name_status[0];
+            }
+
+            return $product;
+        });
+
+        $products_page = Product::paginate(5);
+
+        return view('products.index',compact('products','products_page'));
     }
 
     /**
@@ -34,7 +57,11 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('products.crear');
+
+        $categories=Categorie::pluck('name','id')->toArray();
+        $statuses=Status::pluck('name','id')->toArray();
+
+        return view('products.crear', compact('categories','statuses'));
     }
 
     /**
@@ -45,16 +72,25 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
+
         request()->validate([
             'name' => 'required',
-            'amount' => 'required|regex:^(?:[1-9]\d+|\d)(?:\,\d\d)?$',
+            'amount' => 'required|min:1|regex:/^\d*(\.\d{1,2})?$/',
             'categorie_id' => 'required|integer',
-            'status_id' => 'required|boolean'
+            'status_id' => 'required|integer'
         ]);
 
-        Product::create($request->all());
+        $product=[
+            'name' => $request->name,
+            'comment' => $request->comment,
+            'amount' => $request->amount,
+            'categorie_id' => $request->categorie_id,
+            'status_id' => $request->status_id
+        ];
 
-        return view('products.index');
+        Product::firstOrCreate($product); //Si el producto ya exciste no lo crea
+
+        return redirect()->route('products.index');
 
     }
 
@@ -77,7 +113,11 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        return view('products.editar',compact('product'));
+
+        $categories=Categorie::pluck('name','id')->toArray();
+        $statuses=Status::pluck('name','id')->toArray();
+
+        return view('products.editar',compact('product','categories','statuses'));
     }
 
     /**
@@ -89,9 +129,11 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
+
+        dd($request);
         request()->validate([
             'name' => 'required',
-            'amount' => 'required|regex:^(?:[1-9]\d+|\d)(?:\,\d\d)?$',
+            'amount' => 'required',
             'categorie_id' => 'required|integer',
             'status_id' => 'required|boolean'
         ]);
@@ -112,4 +154,5 @@ class ProductController extends Controller
         $product->delete();
         return redirect()->route('products.index');
     }
+
 }
