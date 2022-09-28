@@ -5,22 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Status extends Model
+class Company extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'name',
-        'comment',
-        'enable',
+        'db',
     ];
-
-    protected $connection = 'gestionbar';
-
-    function __construct()
-    {
-        $this->connection = session('db_customer');
-    }
-
-
 }

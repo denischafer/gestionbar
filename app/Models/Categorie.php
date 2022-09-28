@@ -14,4 +14,12 @@ class Categorie extends Model
         'comment',
         'enable',
     ];
+
+    protected $connection = 'gestionbar';
+
+    function __construct()
+    {
+        $this->connection = session('db_customer');
+    }
+
 }

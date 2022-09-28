@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use App\Models\Company;
 
-class CreateUsersTable extends Migration
+class CreateCompanyTable extends Migration
 {
     /**
      * Run the migrations.
@@ -19,21 +19,33 @@ class CreateUsersTable extends Migration
         $dbdefault = 'gestionbar';
         if(($dbdefault == $nameconn) && !empty($dbdefault)) {
 
-            if (!Schema::hasTable('users')) {
+            if (!Schema::hasTable('companies')) {
 
-                Schema::create('users', function (Blueprint $table) {
+                Schema::create('companies', function (Blueprint $table) {
                     $table->id();
                     $table->string('name');
-                    $table->string('email')->unique();
-                    $table->timestamp('email_verified_at')->nullable();
-                    $table->string('password');
-                    $table->string('db');
-                    $table->rememberToken();
+                    $table->string('db')->unique();
                     $table->timestamps();
                 });
 
             }
+
+            //Agregar DB gestionbar
+            $exist = Company::where('name','gestionbar')->first();
+
+            if(empty($exist)){
+
+                $company = new Company();
+                $company->name='gestionbar';
+                $company->db='gestionbar';
+                $company->save();
+
+                echo "Creando DB: gestionbar \n";
+            }
+
+
         }
+
     }
 
     /**
@@ -43,6 +55,6 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('companies');
     }
 }

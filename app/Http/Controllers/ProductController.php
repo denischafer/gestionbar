@@ -14,6 +14,7 @@ class ProductController extends Controller
 
     function __construct()
     {
+
         $this->middleware('permission:ver-productos|crear-productos|editar-productos|borrar-productos', ['only' => ['index']]);
         $this->middleware('permission:crear-productos', ['only' => ['create','store']]);
         $this->middleware('permission:editar-productos', ['only' => ['edit','update']]);
@@ -79,16 +80,24 @@ class ProductController extends Controller
             'categorie_id' => 'required|integer',
             'status_id' => 'required|integer'
         ]);
-
+/*
         $product=[
             'name' => $request->name,
             'comment' => $request->comment,
             'amount' => $request->amount,
-            'categorie_id' => $request->categorie_id,
-            'status_id' => $request->status_id
+            'categorie_id' => intval($request->categorie_id),
+            'status_id' => intval($request->status_id),
         ];
-
+        dd($product);
         Product::firstOrCreate($product); //Si el producto ya exciste no lo crea
+*/
+        $prod = new Product;
+        $prod->name = $request->name;
+        $prod->comment = $request->comment;
+        $prod->amount = $request->amount;
+        $prod->categorie_id = $request->categorie_id;
+        $prod->status_id = $request->status_id;
+        $prod->save();
 
         return redirect()->route('products.index');
 
@@ -130,7 +139,6 @@ class ProductController extends Controller
     public function update(Request $request, Product $product)
     {
 
-        dd($request);
         request()->validate([
             'name' => 'required',
             'amount' => 'required',

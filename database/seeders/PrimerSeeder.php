@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
-class SeederTablaPermisos extends Seeder
+class PrimerSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -48,7 +48,13 @@ class SeederTablaPermisos extends Seeder
 
             if(empty($exist)){
 
-                $result = Status::create($status);
+                $sta = new Status();
+                $sta->name = $status['name'];
+                $sta->comment = $status['comment'];
+                $sta->enabled = $status['enabled'];
+                $sta->created_at = $status['created_at'];
+                $sta->save();
+
                 echo "Creando Estado: ".$status['name']." \n";
                 $count++;
             }
@@ -76,7 +82,13 @@ class SeederTablaPermisos extends Seeder
 
             if(empty($exist)){
 
-                $result = Categorie::create($categorie);
+                $cta = new Categorie();
+                $cta->name = $categorie['name'];
+                $cta->comment = $categorie['comment'];
+                $cta->enabled = $categorie['enabled'];
+                $cta->created_at = $categorie['created_at'];
+                $cta->save();
+
                 echo "Creando Categoria: ".$categorie['name']." \n";
                 $count++;
             }
@@ -133,6 +145,7 @@ class SeederTablaPermisos extends Seeder
             $user->name='Denis Schafer';
             $user->email='denischafer@gmail.com';
             $user->password=Hash::make('$0deJulio');
+            $user->db='gestionbar';
             $user->save();
             echo "Creando SuperUsuario \n";
             $count++;

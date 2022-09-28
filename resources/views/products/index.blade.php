@@ -10,10 +10,10 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
-                           @can('crear-prod')
+                           @can('crear-productos')
                            <a class='btn btn-warning' href='{{ route('products.create') }}'>Agregar Producto</a>
                            @endcan
-                           {{ session('db_customer') }}
+
                            <table class='table table-striped mt-2'>
                            <thead class='bg-primary'>
                                 <th class='text-white d-none'>Id</th>
@@ -34,11 +34,11 @@
                                     <td>{{ $product->categorie_name }}</td>
                                     <td>{{ $product->status_name }}</td>
                                     <td class='text-right'>
-                                        @can('edit-prod')
+                                        @can('editar-productos')
                                         <a class='btn btn-success' href='{{ route('products.edit',$product->id) }}'>Editar</a>
                                         @endcan
 
-                                        @can('borrar-prod')
+                                        @can('borrar-productos')
                                             {!! Form::open(['method'=>'DELETE', 'route'=>['products.destroy', $product->id], 'style'=>'display:inline']) !!}
                                                 {!! Form::submit('Borrar', ['class'=>'btn btn-danger']) !!}
                                             {!! Form::close() !!}

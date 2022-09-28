@@ -52,7 +52,16 @@ class UserController extends Controller
         $input = $request->all();
         $input['password'] = Hash::make($input['password']);
 
-        $user = User::create($input);
+        $user=[
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => $input['password'],
+            'db' => session('db_customer'),
+            'remember_token' => $request->_token
+        ];
+
+        $user = User::create($user); //Si el producto ya exciste no lo crea
+
         $user->assignRole($request->input('roles'));
 
         return redirect()->route('users.index');
