@@ -19,7 +19,12 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::paginate(10);
+        $db=session('db_customer');
+        $users = User::where(function ($query) use ($db) {
+            if ($db != 'gestionbar') {
+                $query->where('db',$db);
+            }
+        })->paginate(10);
         return view('users.index', compact('users'));
     }
 
@@ -30,7 +35,11 @@ class UserController extends Controller
      */
     public function create()
     {
-        $roles = Role::pluck('name','name')->all();
+        if(session('db_customer') != 'gestionbar'){
+            $roles = Role::where('name','<>','SuperAdministrador')->pluck('name','name');
+        } else {
+            $roles = Role::pluck('name','name')->all();
+        }
         return view('users.crear', compact('roles'));
     }
 
@@ -87,7 +96,11 @@ class UserController extends Controller
     public function edit($id)
     {
         $user = User::find($id);
-        $roles = Role::pluck('name','name')->all();
+        if(session('db_customer') != 'gestionbar'){
+            $roles = Role::where('name','<>','SuperAdministrador')->pluck('name','name');
+        } else {
+            $roles = Role::pluck('name','name')->all();
+        }
         $userRole = $user->roles->pluck('name','name')->all();
         return view('users.editar', compact('user','roles','userRole'));
     }

@@ -26,7 +26,12 @@ class RolController extends Controller
      */
     public function index()
     {
-        $roles = Role::paginate(10);
+        if(session('db_customer') != 'gestionbar'){
+            $roles = Role::where('name','<>','SuperAdministrador')->paginate(10);
+        } else {
+            $roles = Role::paginate(10);
+        }
+
         return view( 'roles.index', compact('roles') );
     }
 
