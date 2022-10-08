@@ -4,3 +4,4 @@ composer.lock
 package-lock.json
 /public/mix-manifest.json
 yarn.lock
+/node_modules
